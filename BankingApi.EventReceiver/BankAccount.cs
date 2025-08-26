@@ -1,8 +1,8 @@
-﻿namespace BankingApi.EventReceiver
+﻿namespace BankingApi.EventReceiver;
+
+public class BankAccount
 {
-    public class BankAccount
-    {
-        public Guid Id { get; set; }
-        public decimal Balance { get; set; }
-    }
+    public Guid Id { get; set; }
+
+    public decimal Balance { get; set; }
 }
