@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingApi.EventReceiver.Migrations
 {
     [DbContext(typeof(BankingApiDbContext))]
-    [Migration("20250821162206_AddRowVersionToBankAccount")]
-    partial class AddRowVersionToBankAccount
+    [Migration("20250826170342_AddTxnTable")]
+    partial class AddTransaction
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,24 +26,31 @@ namespace BankingApi.EventReceiver.Migrations
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("BankingApi.EventReceiver.BankAccount", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
+                b.Property<decimal>("Balance")
+                    .HasColumnType("decimal(18,2)");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                b.HasKey("Id");
 
-                    b.HasKey("Id");
+                b.HasIndex("Id")
+                    .IsUnique();
 
-                    b.ToTable("BankAccounts");
-                });
+                b.ToTable("Transactions");
+            });
+
+            modelBuilder.Entity("BankingApi.EventReceiver.Transaction", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uniqueidentifier");
+
+                b.HasKey("Id");
+
+            });
 #pragma warning restore 612, 618
         }
     }

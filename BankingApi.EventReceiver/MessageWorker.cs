@@ -1,4 +1,5 @@
 ﻿using BankingApi.EventReceiver.Exceptions;
+using BankingApi.EventReceiver.Extensions;
 using BankingApi.EventReceiver.Models;
 using BankingApi.EventReceiver.Services;
 using Microsoft.Extensions.Hosting;
@@ -131,6 +132,11 @@ public class MessageWorker : BackgroundService
         {
             JsonException => true,
             ArgumentException => true,
+            InvalidAccountIdException => true,
+            InvalidBalanceChangeEventException => true,
+            InvalidTransactionTypeException => true,
+            TransactionAlreadyProcessedException => true,
+            ProcessingException ex => !ex.IsTransient,
             _ => false
         };
     }

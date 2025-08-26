@@ -30,6 +30,14 @@ public class TransactionProcessor : ITransactionProcessor
         {
             try
             {
+                var wasProcessedBefore = _context.Transactions.Any(x => x.Id == balanceChangeEvent.Id);
+
+                if (wasProcessedBefore)
+                {
+                    _logger.LogInformation("Such transation with Id={TxnId} was already processed", balanceChangeEvent.Id);
+                    throw new TransactionAlreadyProcessedException(balanceChangeEvent.Id.ToString() ?? "");
+                }
+
                 var bankAccount = await _context.BankAccounts.FirstOrDefaultAsync(ba => ba.Id == balanceChangeEvent.BankAccountId, cancellationToken);
 
                 if (bankAccount == null)
@@ -42,7 +50,10 @@ public class TransactionProcessor : ITransactionProcessor
                 var newBalance = CalculateNewBalance(currentAccountBalance, balanceChangeEvent);
 
                 bankAccount.Balance = newBalance;
-
+                _context.Transactions.Add(new Transaction
+                {
+                    Id = balanceChangeEvent.Id
+                });
                 await _context.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
 

@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace BankingApi.EventReceiver.Exceptions
 {
-    public class InvalidAccountIdException : ProcessingException
+    class TransactionAlreadyProcessedException : ProcessingException
     {
-        public InvalidAccountIdException(string accountId)
-            : base($"Account ID {accountId} is not valid")
+        public TransactionAlreadyProcessedException(string message) : base(message, false)
         {
         }
     }

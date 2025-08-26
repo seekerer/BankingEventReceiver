@@ -10,6 +10,7 @@ namespace BankingApi.EventReceiver
         }
 
         public DbSet<BankAccount> BankAccounts { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
@@ -30,6 +31,13 @@ namespace BankingApi.EventReceiver
                     .HasColumnType("decimal(18,2)")
                     .IsRequired();
                 
+                entity.HasIndex(e => e.Id).IsUnique();
+            });
+
+            modelBuilder.Entity<Transaction>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
                 entity.HasIndex(e => e.Id).IsUnique();
             });
         }

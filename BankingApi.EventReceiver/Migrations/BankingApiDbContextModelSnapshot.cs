@@ -35,6 +35,16 @@ namespace BankingApi.EventReceiver.Migrations
 
                     b.ToTable("BankAccounts");
                 });
+
+            modelBuilder.Entity("BankingApi.EventReceiver.Transaction", t =>
+            {
+                t.Property<Guid>("Id")
+                .ValueGeneratedOnAdd()
+                .HasColumnType("uniqueidentifier");
+
+                t.HasKey("Id");
+                t.ToTable("Transactions");
+            });
 #pragma warning restore 612, 618
         }
     }

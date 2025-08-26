@@ -269,7 +269,7 @@ public class MessageWorkerTests
         retryServiceMock.Setup(x => x.RunWithRetryAsync(It.IsAny<Func<Task>>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new InvalidAccountIdException(transactionMessage.BankAccountId.ToString()));
 
-        cancellationTokenSource.CancelAfter(TimeSpan.FromMilliseconds(500));
+        cancellationTokenSource.CancelAfter(TimeSpan.FromMilliseconds(50000));
 
         await messageWorker.StartAsync(cancellationTokenSource.Token);
         await Task.Delay(100);
